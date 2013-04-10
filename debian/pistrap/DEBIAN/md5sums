@@ -1,0 +1,10 @@
+444c37bbf3b38ba2a143138f1b6375ad  usr/bin/pistrap
+13a393db6f57bf6cf9d1dfe13557e811  usr/lib/libs-pistrap/i3status.conf
+12fc73c156d0c2fe927c96c4df1d3484  usr/lib/libs-pistrap/inittab
+8a6e0422ad1b15d080fc85b01aa4d288  usr/lib/libs-pistrap/pb-white.png
+8b7ee379e490a6a89aeebe961a3b3624  usr/lib/libs-pistrap/profile
+ed23dac4b369f046c70f5057260bb9cf  usr/lib/libs-pistrap/raspiSetup.sh
+a70690dd8ce67784e7f7562ba8eb6ad0  usr/lib/libs-pistrap/serverprofile
+b61effbd7a66491dc2d90c002e8f48e0  usr/lib/libs-pistrap/ssh.sh
+a043ca400032e566d1a3f117a2362ca1  usr/share/doc/pistrap/changelog.gz
+1932ed80e63d5956a7f544f531d8b194  usr/share/doc/pistrap/copyright
