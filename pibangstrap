@@ -879,7 +879,7 @@ rm -f cleanup
 chmod +x cleanup &>> /var/log/pibangstrap.log
 LANG=C chroot $rootfs /cleanup &>> /var/log/pibangstrap.log
 
-cd /home
+cd
 
 umount $bootp 2>&1 | tee -a /var/log/pibangstrap.log
 sleep 2s
