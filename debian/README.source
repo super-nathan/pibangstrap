@@ -1,8 +1,0 @@
-pistrap for Debian
-------------------
-
-<pistrap.sh - Bootstraps your own minimal RaspberryPi SD-card image, supporting various dists,arches and suites. The tool will also download, configure, and install the latest RPi firmware, kernel module etc...>
-
-
-
-

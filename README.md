@@ -1,4 +1,4 @@
-pistrap
+pibangstrap
 =======
 
 Note
@@ -6,11 +6,7 @@ Note
 This is broken in Debian Sid for the moment
 
 ABOUT:
-pistrap - Bootstraps your own PiBang install.
-
-NOTE:
-This program is OUT of development. It is currently maintained by Super-Nathan and the PiBang Linux project. 
-Also "pistrap.sh" is not just "pistrap"
+pibangstrap - Bootstraps your own PiBang install.
 
 INSTALL:
 With the addition of libraries, this software must be installed with dpkg and ran like a normal program.
@@ -24,7 +20,7 @@ to make a package, now install with
     
 now you can run it with
 
-    sudo pistrap
+    sudo pibangstrap
 
 CREDITS:
 First based on work by Klaus M Pfeiffer <klaus.m.pfeiffer@kmp.or.at> at http://blog.kmp.or.at/2012/05/build-your-own-raspberry-pi-image/.
@@ -45,4 +41,4 @@ TIPS:
 * We install NTP as the date and time will be wrong, due to no RTC being on the board. We also need this and the SSL certificates, so we can checkout the firmware from github.
 * You need to have superuser rights to use this tool because debootstrap will create device nodes (using mknod) as well as chroot into the newly *created system.
 * It *should* work on non-debian systems that have debootstrap. I have heard you can install debootstrap on Fedora, Arch Linux etc...  Our apt-get's are done inside the debian chroots now, which is fine.
-* Everything is logged to /var/log/pistrap.log
+* Everything is logged to /var/log/pibangstrap.log

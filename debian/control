@@ -1,12 +1,12 @@
-Source: pistrap
+Source: pibangstrap
 Section: devel
 Priority: extra
 Maintainer: "Super" Nathan Weber <supernathansunshine@gmaill.com>
 Build-Depends: debhelper (>= 7.0.50~), devscripts
 Standards-Version: 3.9.1
-Homepage: <http://github.com/super-nathan/pistrap>
+Homepage: <http://github.com/super-nathan/pibangstrap>
 
-Package: pistrap
+Package: pibangstrap
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, binfmt-support, qemu, qemu-user-static, debootstrap, kpartx, lvm2,dosfstools, git-core, binutils, ca-certificates, ntp, ntpdate, openssh-server, less, vim, screen, multistrap, schroot, fakechroot, cdebootstrap, minicom, debhelper, devscripts
 Description: Bootstraps your own PiBang Image

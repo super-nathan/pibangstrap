@@ -71,7 +71,7 @@ echo "
 ***************************
  Starting build at $mytime
 ***************************
-" > /var/log/pistrap.log
+" > /var/log/pibangstrap.log
 }
 
 function sayHello
@@ -217,27 +217,27 @@ function partitionDevice
 if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	if [ "$device" == "" ]; then
 	  whiptail --infobox "Creating image." 0 0; sleep 2;
-	  mkdir -p $buildenv  &>> /var/log/pistrap.log
+	  mkdir -p $buildenv  &>> /var/log/pibangstrap.log
 	  image="${buildenv}/PiBang_${mydate}.img"
-	  dd if=/dev/zero of=$image bs=1MB count=3900  &>> /var/log/pistrap.log
+	  dd if=/dev/zero of=$image bs=1MB count=3900  &>> /var/log/pibangstrap.log
 	  device=`losetup -f --show $image`
 	  whiptail --infobox "Image: ${image} created and mounted as: ${device}" 0 0; sleep 2;
 	else
 	  whiptail --infobox "Partitioning Device ${device}" 0 0; sleep 1;
-	  dd if=/dev/zero of=$device bs=512 count=1 &>> /var/log/pistrap.log
+	  dd if=/dev/zero of=$device bs=512 count=1 &>> /var/log/pibangstrap.log
 	fi
 	
 else
 	if [ "$device" == "" ]; then
 	  whiptail --infobox "Creating image." 0 0; sleep 2;
-	  mkdir -p $buildenv  &>> /var/log/pistrap.log
+	  mkdir -p $buildenv  &>> /var/log/pibangstrap.log
 	  image="${buildenv}/PiBang_${mydate}.img"
-	  dd if=/dev/zero of=$image bs=1MB count=1900  &>> /var/log/pistrap.log
+	  dd if=/dev/zero of=$image bs=1MB count=1900  &>> /var/log/pibangstrap.log
 	  device=`losetup -f --show $image`
 	  whiptail --infobox "Image: ${image} created and mounted as: ${device}" 0 0; sleep 2;
 	else
 	  whiptail --infobox "Partitioning Device ${device}" 0 0; sleep 1;
-	  dd if=/dev/zero of=$device bs=512 count=1 &>> /var/log/pistrap.log
+	  dd if=/dev/zero of=$device bs=512 count=1 &>> /var/log/pibangstrap.log
 	fi
 fi
 
@@ -263,7 +263,7 @@ function mountDevice
 whiptail --infobox "Mounting Partitions..." 0 0; sleep 2;
 
 if [ "$image" != "" ]; then
-  losetup -d $device &>> /var/log/pistrap.log
+  losetup -d $device &>> /var/log/pibangstrap.log
   device=`kpartx -va $image | sed -E 's/.*(loop[0-9])p.*/\1/g' | head -1`
   device="/dev/mapper/${device}"
   bootp=${device}p1
@@ -288,34 +288,34 @@ function formatDevice
 {
 whiptail --infobox "Formatting Partitions ${bootp} and ${rootp}..." 0 0; sleep 3;
 
-mkfs.vfat $bootp &>> /var/log/pistrap.log # Boot partition
-mkfs.ext4 $rootp &>> /var/log/pistrap.log # Partition that will hold rootfs.
+mkfs.vfat $bootp &>> /var/log/pibangstrap.log # Boot partition
+mkfs.ext4 $rootp &>> /var/log/pibangstrap.log # Partition that will hold rootfs.
 
-mkdir -p $rootfs &>> /var/log/pistrap.log
+mkdir -p $rootfs &>> /var/log/pibangstrap.log
 }
 
 function bootstrapDevice
 {
 whiptail --infobox "Entering new filesystem at ${rootfs}..." 0 0; sleep 1;
-mount $rootp $rootfs  &>> /var/log/pistrap.log
-cd $rootfs  &>> /var/log/pistrap.log
+mount $rootp $rootfs  &>> /var/log/pibangstrap.log
+cd $rootfs  &>> /var/log/pibangstrap.log
 
 whiptail --infobox "Bootstrapping into ${rootfs}..." 0 0; sleep 2;
 # To bootstrap our new system, we run debootstrap, passing it the target arch and suite, as well as a directory to work in.
 # FIXME: We do --no-check-certificate and --no-check-gpg to make raspbian work.
-debootstrap --no-check-certificate --no-check-gpg --foreign --arch $arch $suite $rootfs $deb_mirror  2>&1 | tee -a /var/log/pistrap.log
+debootstrap --no-check-certificate --no-check-gpg --foreign --arch $arch $suite $rootfs $deb_mirror  2>&1 | tee -a /var/log/pibangstrap.log
 
 whiptail --infobox "Second stage. Chrooting into ${rootfs}..." 0 0; sleep 2;
 # To be able to chroot into a target file system, the qemu emulator for the target CPU needs to be accessible from inside the chroot jail.
-cp /usr/bin/qemu-arm-static usr/bin/  &>> /var/log/pistrap.log
+cp /usr/bin/qemu-arm-static usr/bin/  &>> /var/log/pibangstrap.log
 # Second stage - Run Post-install scripts.
-LANG=C chroot $rootfs /debootstrap/debootstrap --no-check-certificate --no-check-gpg --second-stage  2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /debootstrap/debootstrap --no-check-certificate --no-check-gpg --second-stage  2>&1 | tee -a /var/log/pibangstrap.log
 }
 
 function configureBoot
 {
 whiptail --infobox "Configuring boot partition ${bootp} on ${bootfs}..." 0 0; sleep 1;
-mount $bootp $bootfs  &>> /var/log/pistrap.log
+mount $bootp $bootfs  &>> /var/log/pibangstrap.log
 
 #TODO: Configure /etc/inittab, and use USB serial console?
 whiptail --infobox "Configuring bootloader..." 0 0; sleep 1;
@@ -382,7 +382,7 @@ function aptSetup
 {
 echo "
 apt-configure time
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 echo "#!/bin/bash
 sh -l -ex - <<\EOF
@@ -396,8 +396,8 @@ EOF1
 EOF
 rm -f apt
 " > apt
-chmod +x apt  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /apt  &>> /var/log/pistrap.log
+chmod +x apt  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /apt  &>> /var/log/pibangstrap.log
 }
 
 #This is ONLY here because spindle did it first
@@ -406,7 +406,7 @@ function debConfSetup
 {
 echo "
 deb-configure 
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 echo "#!/bin/bash
 sh -l -ex - <<EOF
@@ -489,8 +489,8 @@ SELEOF
 EOF
 rm -f deb
 " > deb
-chmod +x deb  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /deb  2>&1 | tee -a /var/log/pistrap.log
+chmod +x deb  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /deb  2>&1 | tee -a /var/log/pibangstrap.log
 }
 
 
@@ -503,7 +503,7 @@ echo "
 *****************
     Stage 3
 *****************
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 # Install things we need in order to grab and build firmware from github, and to work with the target remotely. Also, NTP as the date and time will be wrong, due to no RTC being on the board. This is important, as if you get errors relating to certificates, then the problem is likely due to one of two things. Either the time is set incorrectly on your Raspberry Pi, which you can fix by simply setting the time using NTP. The other possible issue is that you might not have the ca-certificates package installed, and so GitHub's SSL certificate isn't trusted.
 if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
@@ -528,8 +528,8 @@ apt-get  update && yes | apt-get upgrade
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
-chmod +x third-stage  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /third-stage  2>&1 | tee -a /var/log/pistrap.log
+chmod +x third-stage  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /third-stage  2>&1 | tee -a /var/log/pibangstrap.log
 
 
 else
@@ -551,8 +551,8 @@ apt-get  update && yes | apt-get upgrade
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
-chmod +x third-stage  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /third-stage  2>&1 | tee -a /var/log/pistrap.log
+chmod +x third-stage  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /third-stage  2>&1 | tee -a /var/log/pibangstrap.log
 fi
 }
 
@@ -565,7 +565,7 @@ echo "
 *****************
     Stage 4
 *****************
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 if [ "${pb_desktop}" = "i3" -o "${pb_desktop}" = "openbox" ] ; then
 echo "#!/bin/bash
@@ -587,8 +587,8 @@ apt-get install -y xfonts-base xarchiver
 apt-get install -y dosfstools reiserfsprogs xfsprogs btrfs-tools
 rm -f fourth-stage 
 " > fourth-stage
-chmod +x fourth-stage  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /fourth-stage  2>&1 | tee -a /var/log/pistrap.log
+chmod +x fourth-stage  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /fourth-stage  2>&1 | tee -a /var/log/pibangstrap.log
 
 
 else
@@ -609,8 +609,8 @@ apt-get install -y python3
 apt-get install -y dosfstools reiserfsprogs xfsprogs btrfs-tools
 rm -f fourth-stage 
 " > fourth-stage
-chmod +x fourth-stage  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /fourth-stage  2>&1 | tee -a /var/log/pistrap.log
+chmod +x fourth-stage  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /fourth-stage  2>&1 | tee -a /var/log/pibangstrap.log
 
 fi
 }
@@ -618,15 +618,15 @@ fi
 # with this much talk about stages we need a rocket.
 function launch
 {
-echo "" 2>&1 | tee -a /var/log/pistrap.log
-echo "" 2>&1 | tee -a /var/log/pistrap.log
-echo "  @>=----\ " 2>&1 | tee -a /var/log/pistrap.log
-echo "      \   ============== \ " 2>&1 | tee -a /var/log/pistrap.log
-echo "   @>=   PiBang Linux !   ==> " 2>&1 | tee -a /var/log/pistrap.log
-echo "      /   ============== / " 2>&1 | tee -a /var/log/pistrap.log
-echo "  @>=----/        " 2>&1 | tee -a /var/log/pistrap.log	
-echo "" 2>&1 | tee -a /var/log/pistrap.log
-echo "" 2>&1 | tee -a /var/log/pistrap.log
+echo "" 2>&1 | tee -a /var/log/pibangstrap.log
+echo "" 2>&1 | tee -a /var/log/pibangstrap.log
+echo "  @>=----\ " 2>&1 | tee -a /var/log/pibangstrap.log
+echo "      \   ============== \ " 2>&1 | tee -a /var/log/pibangstrap.log
+echo "   @>=   PiBang Linux !   ==> " 2>&1 | tee -a /var/log/pibangstrap.log
+echo "      /   ============== / " 2>&1 | tee -a /var/log/pibangstrap.log
+echo "  @>=----/        " 2>&1 | tee -a /var/log/pibangstrap.log	
+echo "" 2>&1 | tee -a /var/log/pibangstrap.log
+echo "" 2>&1 | tee -a /var/log/pibangstrap.log
 }
 
 #This should only be for X-dependant apps and pibang stuff. In theory, this is what seperates us from Raspbian.
@@ -637,7 +637,7 @@ whiptail --infobox "PiBang magic stage. Installing packages..." 0 0; sleep 4;
 if [ "${pb_desktop}" = "i3" ] ; then
 echo "
 PiBang Magic stage
-" >> /var/log/pistrap.log 
+" >> /var/log/pibangstrap.log 
 echo "#!/bin/bash
 apt-get install -y  nitrogen aptitude i3-wm i3status libwebkitgtk-3.0-0
 apt-get install --no-install-recommends -y midori
@@ -655,13 +655,13 @@ apt-get install -y  pibang-core-i3
 sed /etc/NetworkManager/NetworkManager.conf -i -e \"s/managed=false/managed=true/\"
 rm -f pibangSetup 
 " > pibangSetup
-chmod +x pibangSetup  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pistrap.log
+chmod +x pibangSetup  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pibangstrap.log
 
 elif [ "${pb_desktop}" = "openbox" ] ; then
 echo "
 PiBang Magic stage
-" >> /var/log/pistrap.log 
+" >> /var/log/pibangstrap.log 
 echo "#!/bin/bash
 apt-get install -y openbox obconf obmenu tint2 nitrogen conky aptitude libwebkitgtk-3.0-0
 apt-get install --no-install-recommends -y midori
@@ -680,21 +680,21 @@ apt-get install -y  pibang-core
 sed /etc/NetworkManager/NetworkManager.conf -i -e \"s/managed=false/managed=true/\"
 rm -f pibangSetup 
 " > pibangSetup
-chmod +x pibangSetup  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pistrap.log
+chmod +x pibangSetup  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pibangstrap.log
 
 else
 echo "
 PiBang Magic stage
-" >> /var/log/pistrap.log 
+" >> /var/log/pibangstrap.log 
 echo "
 apt-get install -y  rsync curl wget molly-guard
 apt-get install -y  pbmenu-apps cb-welcome ceni mwt aptitude telnet sl pibang-configs htop powertop nmon iftop iotop sudo
 apt-get install -y  pibang-server
 rm -f pibangSetup 
 " > pibangSetup
-chmod +x pibangSetup  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pistrap.log
+chmod +x pibangSetup  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pibangstrap.log
 fi
 }
 
@@ -709,11 +709,11 @@ apt-get install -y lightdm gnome-themes-standard gnome-icon-theme
 update-rc.d lightdm disable 2
 rm -f lightdm 
 " > lightdm
-chmod +x lightdm  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /lightdm  &>> /var/log/pistrap.log
+chmod +x lightdm  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /lightdm  &>> /var/log/pibangstrap.log
 
 else
-echo "no login magager" | tee -a /var/log/pistrap.log
+echo "no login magager" | tee -a /var/log/pibangstrap.log
 fi
 }
 
@@ -738,8 +738,8 @@ EOF3
 EOF1
 rm -f motdSetup
 " > motdSetup
-chmod +x motdSetup  &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /motdSetup  &>> /var/log/pistrap.log
+chmod +x motdSetup  &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /motdSetup  &>> /var/log/pibangstrap.log
 }
 
 # WE NO LONGER create a default user! From now on making a user will be done during rasp-setup
@@ -752,7 +752,7 @@ echo "
 *****************
 USER-related stuff
 *****************
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 echo "
 #!/bin/bash
@@ -764,15 +764,15 @@ chmod -R 777 /usr/share/themes
 rm -f userSetup.sh
 " >userSetup.sh
 
-cp $rootfs/etc/skel/.zshrc $rootfs/root/ 2>&1 | tee -a /var/log/pistrap.log
+cp $rootfs/etc/skel/.zshrc $rootfs/root/ 2>&1 | tee -a /var/log/pibangstrap.log
 
 
 #this will give a more custom i3 status
-cp /usr/lib/libs-pistrap/i3status.conf $rootfs/etc/ 2>&1 | tee -a /var/log/pistrap.log
+cp /usr/lib/libs-pistrap/i3status.conf $rootfs/etc/ 2>&1 | tee -a /var/log/pibangstrap.log
 
 # now back to work........
-chmod +x userSetup.sh  &>> /var/log/pistrap.log 2>&1 | tee -a /var/log/pistrap.log
-LANG=C chroot $rootfs /userSetup.sh  2>&1 | tee -a /var/log/pistrap.log
+chmod +x userSetup.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /userSetup.sh  2>&1 | tee -a /var/log/pibangstrap.log
 }
 
 function raspiSetup
@@ -783,7 +783,7 @@ echo "
 *****************
    Raspi-Setup
 *****************
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
 
 wget https://raw.github.com/super-nathan/rpi-config/master/config.txt -O $rootfs/boot/config.txt
@@ -807,10 +807,10 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	apt-get install -y  raspi-setup
 	rm -f stuff.sh
 	" > stuff.sh
-	chmod +x stuff.sh  &>> /var/log/pistrap.log 2>&1 | tee -a /var/log/pistrap.log
-	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pistrap.log
-	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pistrap.log
-	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pistrap.log
+	chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
+	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
 	
 else
 	echo "
@@ -821,18 +821,18 @@ else
 	apt-get install -y server-setup
 	rm -f stuff.sh
 	" > stuff.sh
-	chmod +x stuff.sh  &>> /var/log/pistrap.log 2>&1 | tee -a /var/log/pistrap.log
-	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pistrap.log
-	cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pistrap.log
-	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pistrap.log
+	chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
+	cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
 fi
 
 
 
-cp /usr/lib/libs-pistrap/inittab $rootfs/etc/inittab  2>&1 | tee -a /var/log/pistrap.log
-cp /usr/lib/libs-pistrap/raspiSetup.sh $rootfs/raspiSetup.sh   2>&1 | tee -a /var/log/pistrap.log
-chmod +x raspiSetup.sh  &>> /var/log/pistrap.log 2>&1 | tee -a /var/log/pistrap.log
-LANG=C chroot $rootfs /raspiSetup.sh  2>&1 | tee -a /var/log/pistrap.log
+cp /usr/lib/libs-pistrap/inittab $rootfs/etc/inittab  2>&1 | tee -a /var/log/pibangstrap.log
+cp /usr/lib/libs-pistrap/raspiSetup.sh $rootfs/raspiSetup.sh   2>&1 | tee -a /var/log/pibangstrap.log
+chmod +x raspiSetup.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /raspiSetup.sh  2>&1 | tee -a /var/log/pibangstrap.log
 rm -f raspiSetup.sh
 }
 
@@ -845,10 +845,10 @@ echo "
 *****************
       SSH
 *****************
-" >> /var/log/pistrap.log
-cp /usr/lib/libs-pistrap/ssh.sh $rootfs/ssh.sh 2>&1 | tee -a /var/log/pistrap.log
-chmod +x ssh.sh  &>> /var/log/pistrap.log 2>&1 | tee -a /var/log/pistrap.log
-LANG=C chroot $rootfs /ssh.sh  2>&1 | tee -a /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
+cp /usr/lib/libs-pistrap/ssh.sh $rootfs/ssh.sh 2>&1 | tee -a /var/log/pibangstrap.log
+chmod +x ssh.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /ssh.sh  2>&1 | tee -a /var/log/pibangstrap.log
 rm -f ssh.sh
 }
 
@@ -876,17 +876,17 @@ echo "#!/bin/bash
 apt-get -qq clean
 rm -f cleanup
 " > cleanup
-chmod +x cleanup &>> /var/log/pistrap.log
-LANG=C chroot $rootfs /cleanup &>> /var/log/pistrap.log
+chmod +x cleanup &>> /var/log/pibangstrap.log
+LANG=C chroot $rootfs /cleanup &>> /var/log/pibangstrap.log
 
 cd /home
 
-umount $bootp 2>&1 | tee -a /var/log/pistrap.log
+umount $bootp 2>&1 | tee -a /var/log/pibangstrap.log
 sleep 2s
-umount $rootp 2>&1 | tee -a /var/log/pistrap.log
+umount $rootp 2>&1 | tee -a /var/log/pibangstrap.log
 
 if [ "$image" != "" ]; then
-  kpartx -d $image &>> /var/log/pistrap.log
+  kpartx -d $image &>> /var/log/pibangstrap.log
   whiptail --infobox "Created Image: ${image}." 0 0; sleep 2;
 fi
 
@@ -899,8 +899,8 @@ if [ "${rcb}" != "0" ]; then
   sayDone
 else
 	cd $buildenv
-	zip -j pibang.img.zip $image | tee -a /var/log/pistrap.log
-	sha1sum pibang.img.zip | tee -a /var/log/pistrap.log
+	zip -j pibang.img.zip $image | tee -a /var/log/pibangstrap.log
+	sha1sum pibang.img.zip | tee -a /var/log/pibangstrap.log
 fi
 }
 
@@ -915,9 +915,9 @@ echo "
 *****************
       done
 *****************
-" >> /var/log/pistrap.log
+" >> /var/log/pibangstrap.log
 
-cp /var/log/pistrap.log $buildenv/pistrap-ob.log.txt
+cp /var/log/pibangstrap.log $buildenv/pistrap-ob.log.txt
 cd $buildenv
 
 }
