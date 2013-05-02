@@ -1,10 +1,6 @@
 pibangstrap
 =======
 
-Note
--------
-This is broken in Debian Sid for the moment
-
 ABOUT:
 pibangstrap - Bootstraps your own PiBang install.
 
