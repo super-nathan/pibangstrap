@@ -672,7 +672,7 @@ apt-get install -y gksu
 apt-get install -y thunar thunar-volman terminator xscreensaver xfce4-notifyd
 apt-get install -y abiword abiword-common abiword-plugin-grammar abiword-plugin-mathview blueman catfish network-manager-gnome dmenu
 apt-get install -y gmrun geany catfish gimp gpicview gftp transmission-gtk xchat gigolo evince arandr lxappearance  clipit sl telnet
-apt-get install -y gparted synaptic xcompmgr gmrun xfce4-screenshooter ceni arandr gimp scrot volumeicon-alsa vlc
+apt-get install -y gparted synaptic xcompmgr gmrun xfce4-screenshooter ceni arandr gimp scrot volumeicon-alsa vlc hsetroot
 # This is the pibang specific stuff
 apt-get install -y cb-exit cb-pipemenus   borrowed-crunchbang-themes 
 apt-get install -y pbmenu-apps cb-welcome pibang-configs pibang-backgrounds  pibang-keyring pbmenu-apps pibang-backgrounds-contrib oc-change
