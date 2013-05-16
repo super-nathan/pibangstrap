@@ -1,3 +1,9 @@
+pibangstrap (0.2.0) unstable; urgency=low
+
+  * systemd transition
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Thu, 16 May 2013 21:08:27 +0900
+
 pibangstrap (0.1.2) unstable; urgency=low
 
   * trying lxterminal
