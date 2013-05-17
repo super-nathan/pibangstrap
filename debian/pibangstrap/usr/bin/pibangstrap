@@ -35,6 +35,7 @@ getSuite
 getArch
 getDesktop
 getMirror
+getsystemD
 getHostname
 sayFinalWarning
 checkDevice
@@ -47,6 +48,7 @@ configureSystem
 networking
 aptSetup
 debConfSetup
+lockdownSystemD
 thirdStage
 fourthStage
 launch
@@ -141,13 +143,33 @@ whiptail --clear --title "RaspberryPi Card Builder v0.2" \
 retval=$?
 pb_desktop=`cat $tempfile`
 
+}
+
+# system awesome!
+function getsystemD
+
+{
+whiptail --msgbox "Systemd is a new and expiriemtal init service. It is totally awesome and PiBang IS transistioning to it. but is isnt quite perfect yet." 20 70 1
+
+tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+trap "rm -f $tempfile" 0 1 2 5 15
+
+whiptail --clear --title "RaspberryPi Card Builder v0.2" \
+        --menu "Please choose init service: " 0 0 0 \
+        "systemd"  "The original PiBang desktop" \
+        "sysvinit" "An awesome tiling window manager" 2> $tempfile
+
+retval=$?
+initVar=`cat $tempfile`
+
+
 case $retval in
   0)
-     whiptail --infobox "Building with: ${pb_desktop}..." 0 0; sleep 1;;
+     whiptail --infobox "Building with: ${initVar}..." 0 0; sleep 1;;
   1)
-   getArch;;
+   getDesktop;;
   255)
-    getArch;;
+    getDesktop;;
 esac
 }
 
@@ -303,7 +325,7 @@ cd $rootfs  &>> /var/log/pibangstrap.log
 whiptail --infobox "Bootstrapping into ${rootfs}..." 0 0; sleep 2;
 # To bootstrap our new system, we run debootstrap, passing it the target arch and suite, as well as a directory to work in.
 # FIXME: We do --no-check-certificate and --no-check-gpg to make raspbian work.
-debootstrap --no-check-certificate --no-check-gpg --foreign --arch $arch $suite $rootfs $deb_mirror  2>&1 | tee -a /var/log/pibangstrap.log
+debootstrap --no-check-certificate  --no-check-gpg --foreign --arch  $arch $suite $rootfs $deb_mirror  2>&1 | tee -a /var/log/pibangstrap.log
 
 whiptail --infobox "Second stage. Chrooting into ${rootfs}..." 0 0; sleep 2;
 # To be able to chroot into a target file system, the qemu emulator for the target CPU needs to be accessible from inside the chroot jail.
@@ -327,6 +349,27 @@ echo "proc            /proc           proc    defaults        0       0
 /dev/mmcblk0p1  /boot           vfat    defaults        0       0
 " > etc/fstab
 }
+
+function lockdownSystemD
+{
+if [ "${initVar}" = "systemd" ] ; then
+  echo "big balls? systemD it is" 2>&1 | tee -a /var/log/pibangstrap.log
+  echo "#!/bin/bash
+  apt-get update
+  apt-get install --force-yes -y systemd 
+  apt-get install --force-yes -y systemd-sysv
+  apt-get remove --force-yes -y sysvinit
+  echo systemd-sysv hold | dpkg --set-selections
+  rm -f systemd-setup-now
+  " > systemd-setup-now
+  chmod +x systemd-setup-now   &>> /var/log/pibangstrap.log
+  LANG=C chroot $rootfs /systemd-setup-now   2>&1 | tee -a /var/log/pibangstrap.log
+else 
+  echo "sysvinit, cause your scared" 2>&1 | tee -a /var/log/pibangstrap.log
+fi
+
+}
+
 
 function networking
 {
@@ -811,6 +854,16 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  chmod +x etc/etc/systemd/system/raspi-setup.service  | tee -a /var/log/pibangstrap.log
+  echo "
+  #!/bin/bash
+  systemctl raspi-setup enable
+  rm -f stuff2.sh
+  " > stuff2.sh
+  chmod +x stuff2.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+  LANG=C chroot $rootfs /stuff2.sh  2>&1 | tee -a /var/log/pibangstrap.log
+
 	
 else
 	echo "
@@ -825,6 +878,18 @@ else
 	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  chmod +x etc/systemd/system/raspi-setup.service  | tee -a /var/log/pibangstrap.log
+  echo "
+  #!/bin/bash
+  systemctl raspi-setup enable
+  rm -f stuff2.sh
+  " > stuff2.sh
+  chmod +x stuff2.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+  LANG=C chroot $rootfs /stuff2.sh  2>&1 | tee -a /var/log/pibangstrap.log
+
+
+
 fi
 
 
