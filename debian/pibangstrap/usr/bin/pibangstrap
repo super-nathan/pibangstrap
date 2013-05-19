@@ -149,7 +149,7 @@ pb_desktop=`cat $tempfile`
 function getsystemD
 
 {
-whiptail --msgbox "Systemd is a new and expiriemtal init service. It is totally awesome and PiBang IS transistioning to it. but is isnt quite perfect yet." 20 70 1
+whiptail --infobox "Systemd is a new and expiriemtal init service. It is totally awesome and PiBang IS transistioning to it. but is isnt quite perfect yet." 0 0 
 
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
@@ -854,7 +854,7 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
-  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/systemd/system/raspi-setup.service  2>&1 | tee -a /var/log/pibangstrap.log
   chmod +x etc/etc/systemd/system/raspi-setup.service  | tee -a /var/log/pibangstrap.log
   echo "
   #!/bin/bash
@@ -878,7 +878,7 @@ else
 	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
-  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/raspi-setup.service $rootfs/etc/systemd/system/raspi-setup.service  2>&1 | tee -a /var/log/pibangstrap.log
   chmod +x etc/systemd/system/raspi-setup.service  | tee -a /var/log/pibangstrap.log
   echo "
   #!/bin/bash
