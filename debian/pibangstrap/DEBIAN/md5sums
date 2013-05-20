@@ -1,4 +1,4 @@
-629b02aad045096452977421ac6985df  usr/bin/pibangstrap
+9e7c8632dda375be52d7f32c17a152dd  usr/bin/pibangstrap
 b8892a16a248345b1bf3ca1707888487  usr/lib/libs-pistrap/getty@tty1.service
 13a393db6f57bf6cf9d1dfe13557e811  usr/lib/libs-pistrap/i3status.conf
 12fc73c156d0c2fe927c96c4df1d3484  usr/lib/libs-pistrap/inittab
@@ -8,5 +8,5 @@ b8892a16a248345b1bf3ca1707888487  usr/lib/libs-pistrap/getty@tty1.service
 ed23dac4b369f046c70f5057260bb9cf  usr/lib/libs-pistrap/raspiSetup.sh
 a70690dd8ce67784e7f7562ba8eb6ad0  usr/lib/libs-pistrap/serverprofile
 b61effbd7a66491dc2d90c002e8f48e0  usr/lib/libs-pistrap/ssh.sh
-c9545c42168d3cc791f9e62f9f1ddf17  usr/share/doc/pibangstrap/changelog.gz
+8245029eda4370ee9e53121bea78b736  usr/share/doc/pibangstrap/changelog.gz
 1932ed80e63d5956a7f544f531d8b194  usr/share/doc/pibangstrap/copyright

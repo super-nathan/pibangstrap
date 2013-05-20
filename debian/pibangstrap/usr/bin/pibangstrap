@@ -844,7 +844,7 @@ sleep 5s
 if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	echo "
 	#!/bin/bash
-  systemctl slim disable
+  systemctl lightdm disable
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
 	apt-get install -y  lua5.1 triggerhappy
@@ -863,7 +863,7 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 else
 	echo "
 	#!/bin/bash
-  systemctl slim disable
+  systemctl lightdm disable
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
 	apt-get install -y lua5.1 triggerhappy
