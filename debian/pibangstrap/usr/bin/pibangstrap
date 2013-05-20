@@ -35,7 +35,6 @@ getSuite
 getArch
 getDesktop
 getMirror
-getsystemD
 getHostname
 sayFinalWarning
 checkDevice
@@ -59,6 +58,7 @@ userSetup
 motdSetup
 raspiSetup
 newNetwork
+getsystemD
 cleanUp
 sayDone
 }
@@ -749,7 +749,7 @@ if [ "${pb_desktop}" = "i3" -o "${pb_desktop}" = "openbox" ] ; then
 echo "
 #!/bin/bash
 apt-get install -y lightdm gnome-themes-standard gnome-icon-theme
-update-rc.d lightdm disable 2
+update-rc.d lightdm disable 
 rm -f lightdm 
 " > lightdm
 chmod +x lightdm  &>> /var/log/pibangstrap.log
@@ -845,6 +845,7 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	echo "
 	#!/bin/bash
   systemctl lightdm disable
+  update-rc.d lightdm disable 
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
 	apt-get install -y  lua5.1 triggerhappy
@@ -864,6 +865,7 @@ else
 	echo "
 	#!/bin/bash
   systemctl lightdm disable
+  update-rc.d lightdm disable 
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
 	apt-get install -y lua5.1 triggerhappy
