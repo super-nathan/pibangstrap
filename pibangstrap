@@ -34,6 +34,7 @@ getBuildroot
 getSuite
 getArch
 getDesktop
+getsystemD
 getMirror
 getHostname
 sayFinalWarning
@@ -47,7 +48,6 @@ configureSystem
 networking
 aptSetup
 debConfSetup
-lockdownSystemD
 thirdStage
 fourthStage
 launch
@@ -58,7 +58,7 @@ userSetup
 motdSetup
 raspiSetup
 newNetwork
-getsystemD
+lockdownSystemD
 cleanUp
 sayDone
 }
@@ -348,26 +348,6 @@ whiptail --infobox "Configuring fstab..." 0 0; sleep 1;
 echo "proc            /proc           proc    defaults        0       0
 /dev/mmcblk0p1  /boot           vfat    defaults        0       0
 " > etc/fstab
-}
-
-function lockdownSystemD
-{
-if [ "${initVar}" = "systemd" ] ; then
-  echo "big balls? systemD it is" 2>&1 | tee -a /var/log/pibangstrap.log
-  echo "#!/bin/bash
-  apt-get update
-  apt-get install --force-yes -y systemd 
-  apt-get install --force-yes -y systemd-sysv
-  apt-get remove --force-yes -y sysvinit
-  echo systemd-sysv hold | dpkg --set-selections
-  rm -f systemd-setup-now
-  " > systemd-setup-now
-  chmod +x systemd-setup-now   &>> /var/log/pibangstrap.log
-  LANG=C chroot $rootfs /systemd-setup-now   2>&1 | tee -a /var/log/pibangstrap.log
-else 
-  echo "sysvinit, cause your scared" 2>&1 | tee -a /var/log/pibangstrap.log
-fi
-
 }
 
 
@@ -844,7 +824,6 @@ sleep 5s
 if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	echo "
 	#!/bin/bash
-  systemctl lightdm disable
   update-rc.d lightdm disable 
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
@@ -856,15 +835,12 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
 	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
-  rm -rf $rootfs/etc/systemd/system/getty.target.wants/*
-  cp /usr/lib/libs-pistrap/getty@tty1.service $rootfs/etc/systemd/system/getty.target.wants/   2>&1 | tee -a /var/log/pibangstrap.log
-  chmod +x etc/systemd/system/getty.target.wants/getty@tty1.service   | tee -a /var/log/pibangstrap.log
+  
 
 	
 else
 	echo "
 	#!/bin/bash
-  systemctl lightdm disable
   update-rc.d lightdm disable 
 	apt-get update ; yes | apt-get upgrade
 	sleep 5s
@@ -876,10 +852,7 @@ else
   LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
   cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
   chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
-  rm -f $rootfs/etc/systemd/system/getty.target.wants/*
-  cp /usr/lib/libs-pistrap/getty@tty1.service $rootfs/etc/systemd/system/getty.target.wants/   2>&1 | tee -a /var/log/pibangstrap.log
-  chmod +x etc/systemd/system/getty.target.wants/getty@tty1.service   | tee -a /var/log/pibangstrap.log
-
+ 
 fi
 
 
@@ -918,6 +891,30 @@ ResultInactive=no
 ResultActive=yes
 " > $rootfs/etc/polkit-1/localauthority/50-local.d/org.freedesktop.NetworkManager.pkla
 }
+
+
+function lockdownSystemD
+{
+if [ "${initVar}" = "systemd" ] ; then
+  echo "big balls? systemD it is" 2>&1 | tee -a /var/log/pibangstrap.log
+  echo "#!/bin/bash
+  apt-get update
+  apt-get install --force-yes -y systemd 
+  apt-get install --force-yes -y systemd-sysv
+  apt-get remove --force-yes -y sysvinit
+  echo systemd-sysv hold | dpkg --set-selections
+  sed -i /etc/systemd/system/getty.target.wants/getty@tty1.service -e 's#ExecStart=-/sbin/agetty %I 38400#ExecStart=-/sbin/agetty -i -a root %I 38400
+#'
+  rm -f systemd-setup-now
+  " > systemd-setup-now
+  chmod +x systemd-setup-now   &>> /var/log/pibangstrap.log
+  LANG=C chroot $rootfs /systemd-setup-now   2>&1 | tee -a /var/log/pibangstrap.log
+else 
+  echo "sysvinit, cause your scared" 2>&1 | tee -a /var/log/pibangstrap.log
+fi
+
+}
+
 
 
 function cleanUp

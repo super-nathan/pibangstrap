@@ -1,9 +1,0 @@
-[Unit]
-Description=Raspi-Setup
-
-[Service]
-Type=oneshot
-ExecStart=/etc/pibang/raspi-config.sh
-
-[Install]
-WantedBy=multi-user.target
