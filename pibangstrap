@@ -903,8 +903,7 @@ if [ "${initVar}" = "systemd" ] ; then
   apt-get install --force-yes -y systemd-sysv
   apt-get remove --force-yes -y sysvinit
   echo systemd-sysv hold | dpkg --set-selections
-  sed -i /etc/systemd/system/getty.target.wants/getty@tty1.service -e 's#ExecStart=-/sbin/agetty %I 38400#ExecStart=-/sbin/agetty -i -a root %I 38400
-#'
+  sed -i /etc/systemd/system/getty.target.wants/getty@tty1.service -e 's#ExecStart=-/sbin/agetty %I 38400#ExecStart=-/sbin/agetty -i -a root %I 38400#'
   rm -f systemd-setup-now
   " > systemd-setup-now
   chmod +x systemd-setup-now   &>> /var/log/pibangstrap.log
