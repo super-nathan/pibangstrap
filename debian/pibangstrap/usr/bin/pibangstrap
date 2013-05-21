@@ -626,7 +626,6 @@ update-rc.d hwclock.sh disable
 # Don't need to start these by default, wastes boot time
 update-rc.d nfs-common disable
 update-rc.d rpcbind disable
-apt-get install -y alsa-utils
 apt-get install -y python
 apt-get install -y python3
 apt-get install -y dosfstools reiserfsprogs xfsprogs btrfs-tools
@@ -712,7 +711,7 @@ PiBang Magic stage
 " >> /var/log/pibangstrap.log 
 echo "
 apt-get install -y  rsync curl wget molly-guard
-apt-get install -y  pbmenu-apps cb-welcome ceni mwt aptitude telnet sl pibang-configs htop powertop nmon iftop iotop sudo
+apt-get install -y  pbmenu-apps cb-welcome ceni mwt aptitude telnet sl pibang-configs htop powertop nmon iftop iotop sudo atop
 apt-get install -y  pibang-server
 rm -f pibangSetup 
 " > pibangSetup
@@ -850,7 +849,11 @@ else
 	" > stuff.sh
   chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
   LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
-  cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/alsa-utils
+
+
+
+   $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
   chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
  
 fi
