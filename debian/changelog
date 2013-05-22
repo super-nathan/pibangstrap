@@ -1,3 +1,9 @@
+pibangstrap (0.2.12) unstable; urgency=low
+
+  * poor typing wins the race
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Wed, 22 May 2013 14:04:26 +0900
+
 pibangstrap (0.2.11) unstable; urgency=low
 
   * getting closer, the server image booted!

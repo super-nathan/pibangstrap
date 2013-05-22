@@ -849,11 +849,7 @@ else
 	" > stuff.sh
   chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
   LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
-  cp /usr/lib/libs-pistrap/alsa-utils
-
-
-
-   $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+  cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
   chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
  
 fi
