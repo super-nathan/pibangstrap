@@ -8,6 +8,6 @@ Homepage: <http://github.com/super-nathan/pibangstrap>
 
 Package: pibangstrap
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, binfmt-support, qemu, qemu-user-static, debootstrap, kpartx, lvm2,dosfstools, git-core, binutils, ca-certificates, ntp, ntpdate, openssh-server, less, vim, screen, multistrap, schroot, fakechroot, cdebootstrap, minicom, debhelper, devscripts
+Depends: ${shlibs:Depends}, ${misc:Depends}, binfmt-support, qemu, qemu-user-static, debootstrap, kpartx, lvm2,dosfstools, git-core, binutils, ca-certificates, ntp, ntpdate, openssh-server, less, vim, screen, multistrap, schroot, fakechroot, cdebootstrap, minicom, debhelper, devscripts, zip
 Description: Bootstraps your own PiBang Image
 

@@ -1,3 +1,9 @@
+pibangstrap (0.2.15) unstable; urgency=low
+
+  * aded zip as a dependancy
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Sat, 01 Jun 2013 10:39:36 +0900
+
 pibangstrap (0.2.14) unstable; urgency=low
 
   * typo
