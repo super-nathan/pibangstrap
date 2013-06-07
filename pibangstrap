@@ -327,11 +327,13 @@ whiptail --infobox "Bootstrapping into ${rootfs}..." 0 0; sleep 2;
 # FIXME: We do --no-check-certificate and --no-check-gpg to make raspbian work.
 debootstrap --no-check-certificate  --no-check-gpg --foreign --arch  $arch $suite $rootfs $deb_mirror  2>&1 | tee -a /var/log/pibangstrap.log
 
+echo "stage one, complete"
+
 whiptail --infobox "Second stage. Chrooting into ${rootfs}..." 0 0; sleep 2;
 # To be able to chroot into a target file system, the qemu emulator for the target CPU needs to be accessible from inside the chroot jail.
-cp /usr/bin/qemu-arm-static usr/bin/  &>> /var/log/pibangstrap.log
+cp /usr/bin/qemu-arm-static ${rootfs}/usr/bin/  &>> /var/log/pibangstrap.log
 # Second stage - Run Post-install scripts.
-LANG=C chroot $rootfs /debootstrap/debootstrap --no-check-certificate --no-check-gpg --second-stage  2>&1 | tee -a /var/log/pibangstrap.log
+LANG=C chroot $rootfs ${rootfs}/debootstrap/debootstrap --no-check-certificate --no-check-gpg --second-stage  2>&1 | tee -a /var/log/pibangstrap.log
 }
 
 function configureBoot
