@@ -1,3 +1,15 @@
+pibangstrap (0.2.17) unstable; urgency=low
+
+  * Well, that sucked for a long time, but now we are rolling!
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Wed, 17 Jul 2013 12:07:21 +0900
+
+pibangstrap (0.2.16) unstable; urgency=low
+
+  * trying to be more verbose to fix problems
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Fri, 07 Jun 2013 17:27:47 +0900
+
 pibangstrap (0.2.15) unstable; urgency=low
 
   * aded zip as a dependancy
