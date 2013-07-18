@@ -537,8 +537,10 @@ if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 echo "#!/bin/bash
 #debconf-set-selections /debconf.set
 #rm -f /debconf.set
-apt-get  update
-wget -O - http://pibanglinux.org/repo/Publickeylong.gpg.key | apt-key add -
+apt-get update
+wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
+apt-get update
+yes | apt-get upgarde
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
 apt-get install --no-install-recommends -y xserver-xorg-video-fbdev
 apt-get install --no-install-recommends -y xserver-xorg xinit 
@@ -550,7 +552,6 @@ mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
-apt-get  update && yes | apt-get upgrade
 apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
@@ -564,7 +565,9 @@ echo "#!/bin/bash
 #debconf-set-selections /debconf.set
 #rm -f /debconf.set
 apt-get  update
-wget -O - http://pibanglinux.org/repo/Publickeylong.gpg.key | apt-key add -
+wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
+apt-get update
+yes | apt-get upgrade
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
 apt-get install -y htop zsh
 wget  -q http://raw.github.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
@@ -573,7 +576,6 @@ mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
-apt-get  update && yes | apt-get upgrade
 apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
@@ -945,18 +947,10 @@ if [ "$image" != "" ]; then
   whiptail --infobox "Created Image: ${image}." 0 0; sleep 2;
 fi
 
-notify-send -i /usr/lib/libs-pistrap/pb-white.png "Do you want a ZIP archive?"
+cd $buildenv
+zip -j pibang.img.zip $image | tee -a /var/log/pibangstrap.log
 
 
-whiptail --yesno "Do you want to make a zip archive of your new image?" 0 0
-rcb=$?
-if [ "${rcb}" != "0" ]; then
-  sayDone
-else
-	cd $buildenv
-	zip -j pibang.img.zip $image | tee -a /var/log/pibangstrap.log
-	sha1sum pibang.img.zip | tee -a /var/log/pibangstrap.log
-fi
 }
 
 function sayDone
@@ -967,10 +961,14 @@ whiptail --title "RaspberryPi Card Builder v0.2" \
 --msgbox "\n Done!" 0 0
 
 echo "
-*****************
-      done
-*****************
-" >> /var/log/pibangstrap.log
+******************************************************
+                        DONE
+
+ 	your files can be found at $buildenv
+
+******************************************************
+" 2>&1 | tee -a /var/log/pibangstrap.log
+
 
 cp /var/log/pibangstrap.log $buildenv/pistrap-ob.log.txt
 cd $buildenv
