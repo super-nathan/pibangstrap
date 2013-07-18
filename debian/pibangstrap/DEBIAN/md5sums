@@ -1,4 +1,4 @@
-382d05a40f2a638b324b3709aea48779  usr/bin/pibangstrap
+5515da9954030e073abcfc93a3e4ac9c  usr/bin/pibangstrap
 13a393db6f57bf6cf9d1dfe13557e811  usr/lib/libs-pistrap/i3status.conf
 164eb51202386eddc1fe38334508593f  usr/lib/libs-pistrap/inittab
 8a6e0422ad1b15d080fc85b01aa4d288  usr/lib/libs-pistrap/pb-white.png
@@ -6,5 +6,5 @@
 ed23dac4b369f046c70f5057260bb9cf  usr/lib/libs-pistrap/raspiSetup.sh
 a70690dd8ce67784e7f7562ba8eb6ad0  usr/lib/libs-pistrap/serverprofile
 b61effbd7a66491dc2d90c002e8f48e0  usr/lib/libs-pistrap/ssh.sh
-d1b3d80ae97a585e0fb00f0dc3164183  usr/share/doc/pibangstrap/changelog.gz
+594158ad046b6af6e1ef49b303da2a7d  usr/share/doc/pibangstrap/changelog.gz
 1932ed80e63d5956a7f544f531d8b194  usr/share/doc/pibangstrap/copyright
