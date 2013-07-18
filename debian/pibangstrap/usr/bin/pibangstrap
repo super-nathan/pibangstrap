@@ -551,6 +551,7 @@ touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 apt-get  update && yes | apt-get upgrade
+apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
@@ -573,6 +574,7 @@ touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 apt-get  update && yes | apt-get upgrade
+apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
