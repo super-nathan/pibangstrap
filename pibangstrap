@@ -549,7 +549,6 @@ mkdir -p /lib/modules/3.1.9+
 mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
-echo \"root:raspberry\" | chpasswd
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 apt-get  update && yes | apt-get upgrade
 rm -f /etc/udev/rules.d/70-persistent-net.rules
@@ -572,7 +571,6 @@ chmod +x /usr/bin/rpi-update
 mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
-echo \"root:raspberry\" | chpasswd
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
 apt-get  update && yes | apt-get upgrade
 rm -f /etc/udev/rules.d/70-persistent-net.rules
@@ -782,7 +780,6 @@ USER-related stuff
 
 echo "
 #!/bin/bash
-passwd -d root
 chmod -R 777 /usr/share/backgrounds
 chmod -R 777 /usr/share/pixmaps
 chmod -R 777 /usr/share/icons
@@ -927,6 +924,8 @@ whiptail --infobox "Cleaning up..." 0 0; sleep 2;
 sleep 30s &&
 # Tidy up afterward
 echo "#!/bin/bash
+passwd -d root
+passwd -e root
 apt-get -qq clean
 rm -f cleanup
 " > cleanup
