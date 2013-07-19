@@ -862,7 +862,6 @@ sleep 10s &&
 # Tidy up afterward
 echo "#!/bin/bash
 passwd -d root
-passwd -e root
 apt-get -qq clean
 rm -f cleanup
 " > cleanup
