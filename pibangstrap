@@ -718,6 +718,7 @@ rm -f userSetup.sh
 " >userSetup.sh
 
 cp $rootfs/etc/skel/.zshrc $rootfs/root/ 2>&1 | tee -a /var/log/pibangstrap.log
+cp $rootfs/etc/skel/.zshrc.local $rootfs/root/ 2>&1 | tee -a /var/log/pibangstrap.log
 
 
 #this will give a more custom i3 status
