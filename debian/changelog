@@ -1,3 +1,9 @@
+pibangstrap (0.3.2) unstable; urgency=low
+
+  * Updating SSHD 
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Wed, 24 Jul 2013 19:23:32 +0900
+
 pibangstrap (0.3.0) unstable; urgency=low
 
   * Huge cleanup effort!
