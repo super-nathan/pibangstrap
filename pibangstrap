@@ -455,6 +455,8 @@ wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
 apt-get update
 yes | apt-get upgarde
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
+# NEW, WE NOW ENABLE SSHD
+update-rc.d ssh enable
 apt-get install --no-install-recommends -y xserver-xorg-video-fbdev
 apt-get install --no-install-recommends -y xserver-xorg xinit 
 apt-get install -y libgl1-mesa-dri htop xterm zsh
@@ -799,7 +801,6 @@ rm -f raspiSetup.sh
 function sshSafety
 {
 	
-
 echo "
 
                         *****************
