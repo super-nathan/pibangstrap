@@ -455,6 +455,8 @@ wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
 apt-get update
 yes | apt-get upgarde
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
+# NEW, WE NOW ENABLE SSHD
+update-rc.d ssh enable
 apt-get install --no-install-recommends -y xserver-xorg-video-fbdev
 apt-get install --no-install-recommends -y xserver-xorg xinit 
 apt-get install -y libgl1-mesa-dri htop xterm zsh
@@ -718,6 +720,7 @@ rm -f userSetup.sh
 " >userSetup.sh
 
 cp $rootfs/etc/skel/.zshrc $rootfs/root/ 2>&1 | tee -a /var/log/pibangstrap.log
+cp $rootfs/etc/skel/.zshrc.local $rootfs/root/ 2>&1 | tee -a /var/log/pibangstrap.log
 
 
 #this will give a more custom i3 status
@@ -798,7 +801,6 @@ rm -f raspiSetup.sh
 function sshSafety
 {
 	
-
 echo "
 
                         *****************
@@ -862,7 +864,6 @@ sleep 10s &&
 # Tidy up afterward
 echo "#!/bin/bash
 passwd -d root
-passwd -e root
 apt-get -qq clean
 rm -f cleanup
 " > cleanup
