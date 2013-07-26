@@ -1,3 +1,9 @@
+pibangstrap (0.3.3) unstable; urgency=low
+
+  * trying to get rid of the systemd warnings
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Fri, 26 Jul 2013 16:23:17 +0900
+
 pibangstrap (0.3.2) unstable; urgency=low
 
   * Updating SSHD 
