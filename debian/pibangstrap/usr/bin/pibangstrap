@@ -836,9 +836,9 @@ if [ "${initVar}" = "systemd" ] ; then
   " 2>&1 | tee -a /var/log/pibangstrap.log
   echo "#!/bin/bash
   apt-get update
-  apt-get install --force-yes -y systemd 
-  apt-get install --force-yes -y systemd-sysv
-  apt-get remove --force-yes -y sysvinit
+  echo 'Yes, do as I say!' | apt-get install --force-yes -y systemd 
+  echo 'Yes, do as I say!' | apt-get install --force-yes -y systemd-sysv
+  echo 'Yes, do as I say!' | apt-get remove --force-yes -y sysvinit
   echo systemd-sysv hold | dpkg --set-selections
   sed -i /etc/systemd/system/getty.target.wants/getty@tty1.service -e 's#ExecStart=-/sbin/agetty %I 38400#ExecStart=-/sbin/agetty -i -a root %I 38400#'
   rm -f systemd-setup-now
