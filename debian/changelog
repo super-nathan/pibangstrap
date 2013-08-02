@@ -1,3 +1,15 @@
+pibangstrap (0.3.6) unstable; urgency=low
+
+  * yea, ready to rock
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Fri, 02 Aug 2013 11:40:23 +0900
+
+pibangstrap (0.3.4) unstable; urgency=low
+
+  * more compression
+
+ -- "Super" Nathan Weber <supernathansunshine@gmail.com>  Sun, 28 Jul 2013 09:01:57 +0900
+
 pibangstrap (0.3.3) unstable; urgency=low
 
   * trying to get rid of the systemd warnings
