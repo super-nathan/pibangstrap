@@ -23,11 +23,12 @@
 # should work, as the apt-get's are done inside the debian chroots.
 
 #On the host, you need to get some build dependencies first:
-#sudo apt-get -y install binfmt-support qemu qemu-user-static debootstrap kpartx lvm2 dosfstools git-core binutils ca-certificates ntp ntpdate openssh-server less schroot fakechroot cdebootstrap minicom bash debhelper devscripts
+#sudo apt-get -y install zip binfmt-support qemu qemu-user-static debootstrap kpartx lvm2 dosfstools git-core binutils ca-certificates ntp ntpdate openssh-server less schroot fakechroot cdebootstrap minicom bash debhelper devscripts
 
 function main
 {
 # Hopefully we can keeps these steps simple.
+# We failed in the past and had to pare it down. :(
 getVars
 init
 checkRequirements
@@ -62,14 +63,14 @@ sayDone
 }
 
 
-# Force wheezy
+# Force variables from original pistrap because we are too lazy to re-write the damn thing and kinda like the upstream-ability
 function getVars
 {
 suite="wheezy"
 arch="armhf"
 hostname="PiBang"
 device=""
-bootsize="64M" # Boot partition size on RPI.
+bootsize="64M" # Boot partition size on RPI. Don't change
 mydate=`date +%Y%m%d`
 mytime=`date +%H%M`
 image=""
@@ -85,7 +86,7 @@ echo "
                    Starting build at $mytime
                   ***************************
 
-" > /var/log/pibangstrap.log
+" | tee -a /var/log/pibangstrap.log
 }
 
 
@@ -134,7 +135,7 @@ bootfs="${rootfs}/boot"
 
 
 
-# Choose if you want Openbox or i3
+# Choose if you want Openbox, i3, or the server edition
 function getDesktop
 {
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
@@ -160,8 +161,8 @@ trap "rm -f $tempfile" 0 1 2 5 15
 
 whiptail --clear --title "PiBang Image Builder v1.0" \
         --menu "Please choose init service: " 0 0 0 \
-        "systemd"  "The original PiBang desktop" \
-        "sysvinit" "An awesome tiling window manager" 2> $tempfile
+        "systemd"  "New faster, better, init system" \
+        "sysvinit" "Old school Debian init system" 2> $tempfile
 
 retval=$?
 initVar=`cat $tempfile`
@@ -177,8 +178,9 @@ trap "rm -f $tempfile" 0 1 2 5 15
 
 whiptail --clear --title "PiBang Image Builder v1.0" \
         --menu "Please choose a mirror: " 0 0 0 \
-        "http://mirror.devunt.kr/raspbian/raspbian/"  "A Korean Mirror" \
-        "http://archive.raspbian.org/raspbian" "The Main Mirror" 2> $tempfile
+        "http://distribution-us.hexxeh.net/raspbian/archive/raspbian/"  "An American Mirror" \
+        "http://downloads.raspberrypi.org/raspbian/raspbian" "GB Mirror"\
+        "http://mirror.devunt.kr/raspbian/raspbian/"  "A Korean Mirror" 2> $tempfile
 
 retval=$?
 deb_mirror=`cat $tempfile`
@@ -448,12 +450,11 @@ echo "
 # Install things we need in order to grab and build firmware from github, and to work with the target remotely. Also, NTP as the date and time will be wrong, due to no RTC being on the board. This is important, as if you get errors relating to certificates, then the problem is likely due to one of two things. Either the time is set incorrectly on your Raspberry Pi, which you can fix by simply setting the time using NTP. The other possible issue is that you might not have the ca-certificates package installed, and so GitHub's SSL certificate isn't trusted.
 if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
 echo "#!/bin/bash
-#debconf-set-selections /debconf.set
-#rm -f /debconf.set
 apt-get update
 wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
 apt-get update
-yes | apt-get upgarde
+yes | apt-get upgrade
+apt-get install -y pibang-keyring
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
 # NEW, WE NOW ENABLE SSHD
 update-rc.d ssh enable
@@ -462,12 +463,10 @@ apt-get install --no-install-recommends -y xserver-xorg xinit
 apt-get install -y libgl1-mesa-dri htop xterm zsh
 wget  -q http://raw.github.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
 chmod +x /usr/bin/rpi-update
-mkdir -p /lib/modules/3.1.9+
 mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
-apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
@@ -477,12 +476,11 @@ LANG=C chroot $rootfs /third-stage  2>&1 | tee -a /var/log/pibangstrap.log
 
 else
 echo "#!/bin/bash
-#debconf-set-selections /debconf.set
-#rm -f /debconf.set
 apt-get  update
 wget -O - http://pibanglinux.org/repo/pibang.gpg.key | apt-key add -
 apt-get update
 yes | apt-get upgrade
+apt-get install -y pibang-keyring
 apt-get -y install git-core binutils ca-certificates locales console-common ntp ntpdate openssh-server less vim screen 
 apt-get install -y htop zsh
 wget  -q http://raw.github.com/Hexxeh/rpi-update/master/rpi-update -O /usr/bin/rpi-update
@@ -491,7 +489,6 @@ mkdir -p /lib/modules/3.6.11+
 touch /boot/start.elf
 rpi-update
 sed -i -e 's/KERNEL\!=\"eth\*|/KERNEL\!=\"/' /lib/udev/rules.d/75-persistent-net-generator.rules
-apt-get install -y pibang-keyring
 rm -f /etc/udev/rules.d/70-persistent-net.rules
 rm -f third-stage
 " > third-stage
@@ -750,47 +747,26 @@ chmod +x $rootfs/boot/config.txt
 # this will reset the sources from my Korean mirror if you chose the regular mirror this is redundant
 # Since the Korean mirror is faster, but is relient on a sync, it might be as far as a day behind the main
 # This will also update it.
-echo "deb http://archive.raspbian.org/raspbian/ wheezy main contrib non-free
-deb http://pibanglinux.org/repo/ pibang main
-" > etc/apt/sources.list
+cat /usr/lib/libs-pistrap/mirrorlist.txt > $rootfs/etc/apt/sources.list
+
+echo "
+#!/bin/bash
+update-rc.d lightdm disable 
+apt-get update ; yes | apt-get upgrade
 sleep 5s
-
-if [ "${pb_desktop}" = "openbox" -o "${pb_desktop}" = "i3" ] ; then
-	echo "
-	#!/bin/bash
-  update-rc.d lightdm disable 
-	apt-get update ; yes | apt-get upgrade
-	sleep 5s
-	apt-get install -y  lua5.1 triggerhappy
-	apt-get install -y  raspi-setup
-	rm -f stuff.sh
-	" > stuff.sh
-	chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
-	LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
-	cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
-	chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
-  
-
-	
-else
-	echo "
-	#!/bin/bash
-  update-rc.d lightdm disable 
-	apt-get update ; yes | apt-get upgrade
-	sleep 5s
-	apt-get install -y lua5.1 triggerhappy
-	apt-get install -y server-setup
-	rm -f stuff.sh
-	" > stuff.sh
-  chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
-  LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
-  cp /usr/lib/libs-pistrap/serverprofile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
-  chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
- 
-fi
+apt-get install -y  lua5.1 triggerhappy
+apt-get install -y  raspi-setup
+rm -f stuff.sh
+" > stuff.sh
+chmod +x stuff.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /stuff.sh  2>&1 | tee -a /var/log/pibangstrap.log
+cp /usr/lib/libs-pistrap/profile $rootfs/etc/profile.d/raspi-config.sh  2>&1 | tee -a /var/log/pibangstrap.log
+chmod +x etc/profile.d/raspi-config.sh  | tee -a /var/log/pibangstrap.log
 
 
 
+########################3
+# some important files
 cp /usr/lib/libs-pistrap/inittab $rootfs/etc/inittab  2>&1 | tee -a /var/log/pibangstrap.log
 cp /usr/lib/libs-pistrap/raspiSetup.sh $rootfs/raspiSetup.sh   2>&1 | tee -a /var/log/pibangstrap.log
 chmod +x raspiSetup.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
@@ -806,6 +782,8 @@ echo "
                         *****************
                                SSH
                         *****************
+
+
 " >> /var/log/pibangstrap.log
 cp /usr/lib/libs-pistrap/ssh.sh $rootfs/ssh.sh 2>&1 | tee -a /var/log/pibangstrap.log
 chmod +x ssh.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
@@ -829,11 +807,6 @@ ResultActive=yes
 function lockdownSystemD
 {
 if [ "${initVar}" = "systemd" ] ; then
-  echo "
-
-  big balls? systemD it is
-
-  " 2>&1 | tee -a /var/log/pibangstrap.log
   echo "#!/bin/bash
   apt-get update
   echo 'Yes, do as I say!' | apt-get install --force-yes -y systemd 
@@ -845,14 +818,7 @@ if [ "${initVar}" = "systemd" ] ; then
   " > systemd-setup-now
   chmod +x systemd-setup-now   &>> /var/log/pibangstrap.log
   LANG=C chroot $rootfs /systemd-setup-now   2>&1 | tee -a /var/log/pibangstrap.log
-else 
-  echo "
-
-  sysvinit, cause your scared
-
-  " 2>&1 | tee -a /var/log/pibangstrap.log
 fi
-
 }
 
 
@@ -870,24 +836,28 @@ rm -f cleanup
 chmod +x cleanup &>> /var/log/pibangstrap.log
 LANG=C chroot $rootfs /cleanup &>> /var/log/pibangstrap.log
 
+
+
+################
+# why the fuck does my unmount never work? Please fix this!
+###############
+
+
 cd $buildenv
-
-
 umount $bootp 2>&1 | tee -a /var/log/pibangstrap.log
 sleep 2s
 umount $rootp 2>&1 | tee -a /var/log/pibangstrap.log
 
 kpartx -d $image &>> /var/log/pibangstrap.log
 
-zip -j pibang.img.zip $image | tee -a /var/log/pibangstrap.log
+zip -j -9 pibang.img.zip $image | tee -a /var/log/pibangstrap.log
 
 
 }
 
 function sayDone
 {
-notify-send -i /usr/lib/libs-pistrap/pb-white.png "It's all done boss"
-
+echo -e '\a'
 whiptail --title "PiBang Image Builder v1.0" \
 --msgbox "\n Done!" 0 0
 

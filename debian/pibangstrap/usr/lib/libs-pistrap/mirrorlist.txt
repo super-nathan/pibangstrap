@@ -1,0 +1,293 @@
+###############################################################################
+#
+#           This is where APT and APTITUDE get their updates
+#
+###############################################################################
+
+## Official Raspbian Repository
+deb http://archive.raspbian.org/raspbian/ wheezy main contrib non-free
+
+## Official PiBang Repository
+deb http://pibanglinux.org/repo/ pibang main
+
+###############################################################################
+#
+#  THESE ARE EXTRA RASPBIAN MIRRORS TAKEN FROM http://www.raspbian.org/RaspbianMirrors
+#       PIBANG MAKES NO STATEMENTS ABOUT THEIR SPEED, RELIABLILITY, OR UPTIME
+#                       THEY ARE HERE MERELY AS A CONVIENCE!
+#
+###############################################################################
+
+
+#United Kingdom
+#Raspberry Pi Foundation
+# deb http://downloads.raspberrypi.org/raspbian/raspbian wheezy main contrib non-free
+
+#United Kingdom
+#University of Oxford
+# deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian wheezy main contrib non-free
+
+#United Kingdom
+#Mythic Beasts
+# deb http://raspberrypi.mythic-beasts.com/raspbian/raspbian wheezy main contrib non-free
+
+#United Kingdom
+#University of Kent
+#UK Mirror Service
+# deb http://www.mirrorservice.org/sites/archive.raspbian.org/raspbian wheezy main contrib non-free
+
+#United Kingdom
+#RM Education
+# deb http://mirror01.th.ifl.net/raspbian/ wheezy main contrib non-free
+
+#France
+#Arnaud Boudou
+# deb https://goddess-gate.com/archive.raspbian.org/raspbian  wheezy main contrib non-free
+
+#France
+#Sergio Conde
+# deb http://raspbian.sconde.net/raspbian wheezy main contrib non-free
+
+#France
+#Canterbury Computers
+# deb http://raspbian.canterburycomputers.com/raspbian wheezy main contrib non-free
+
+#France
+#Jonathan Rousseau
+# deb http://raspbian.blackhol.es/raspbian wheezy main contrib non-free
+
+#France
+#Gregoryfenton.com
+# deb http://rsync.gregoryfenton.com/raspberrypi/raspbian/ wheezy main contrib non-free
+
+#France
+#Ircam
+# deb http://mirrors.ircam.fr/pub/raspbian/raspbian wheezy main contrib non-free
+
+#France
+#Julien Crifo
+# deb http://ftp.crifo.org/raspbian/raspbian wheezy main contrib non-free
+
+#Ireland
+#HEAnet
+# deb http://ftp.heanet.ie/mirrors/raspbian/raspbian wheezy main contrib non-free
+
+#Germany
+#Repvik
+# deb http://raspbian.lag.re/raspbian wheezy main contrib non-free
+
+#Germany
+#AG DSN
+#Sektion Wundtstraße
+# deb http://ramses.wh2.tu-dresden.de/pub/mirrors/raspbian/raspbian wheezy main contrib non-free
+
+#Germany
+#Leaseweb
+# deb http://mirror.de.leaseweb.net/raspbian/raspbian wheezy main contrib non-free
+
+#Germany
+#Fachschaft Elektrotechnik
+#Universität Paderborn
+# deb http://mirror.et.uni-paderborn.de/raspbian/raspbian wheezy main contrib non-free
+
+#Germany
+#Grmml.eu
+#powered by
+#AOIDE Networks
+# deb http://raspbian.mirror.grmml.eu/raspbian wheezy main contrib non-free
+
+#Germany
+#NetCologne GmbH
+# deb http://mirror.netcologne.de/raspbian/raspbian/ wheezy main contrib non-free
+
+#Germany
+#University of Mannheim
+# deb http://mirror.informatik.uni-mannheim.de/pub/linux/distributions/raspbian/raspbian/ wheezy main contrib non-free
+
+#The Netherlands
+#Leaseweb
+# deb http://mirror.nl.leaseweb.net/raspbian/raspbian wheezy main contrib non-free
+
+#The Netherlands
+#Rory Slegtenhorst
+# deb http://raspberry.coolview.nl/raspbian/raspbian wheezy main contrib non-free
+
+#The Netherlands
+#TechNL
+# deb http://raspbian.mirror.technl.net/raspbian wheezy main contrib non-free
+
+#The Netherlands
+#Triple IT
+# deb http://raspbian.mirror.triple-it.nl/raspbian/ wheezy main contrib non-free
+
+#The Netherlands
+#MuntInternet.net
+# deb http://mirror.muntinternet.net/pub/raspbian/raspbian/ wheezy main contrib non-free
+
+#Belgium
+#Cu.be Solutions
+# deb http://raspbian.cu.be/raspbian/ wheezy main contrib non-free
+
+#Norway
+#The Student Society
+#in Trondhjem
+# deb http://raspbian.trivini.no/raspbian wheezy main contrib non-free
+
+#Switzerland
+#Benjamin Schlageter
+# deb http://raspbian.kilrathy.net/raspbian wheezy main contrib non-free
+
+#Sweden
+#Academic Computer Club at Umeå University
+# deb http://ftp.acc.umu.se/mirror/raspbian/raspbian wheezy main contrib non-free
+
+
+#Portugal
+#University of Porto
+# deb http://mirrors.fe.up.pt/raspbian/ wheezy main contrib non-free
+
+
+#Slovenia
+#ARNES
+# deb http://ftp.arnes.si/mirrors/raspbian/raspbian wheezy main contrib non-free
+
+#Austria
+#chaoshost.at
+# deb http://raspbian.chaoshost.at/raspbian/ wheezy main contrib non-free
+
+#Hungary
+#Innobrand Ltd
+# deb http://raspbian.innobrand.hu/raspbian/ wheezy main contrib non-free
+
+#Denmark
+#dotsrc.org
+# deb http://mirrors.dotsrc.org/raspbian/raspbian wheezy main contrib non-free
+
+#Slovakia
+#Wheel.sk
+# deb http://mirror.wheel.sk/raspbian/raspbian/ wheezy main contrib non-free
+
+#Czech Republic
+#vpsFree.cz
+# deb http://mirror.vpsfree.cz/raspbian/raspbian/ wheezy main contrib non-free
+
+#United States
+#Hexxeh
+# deb http://distribution-us.hexxeh.net/raspbian/archive/raspbian wheezy main contrib non-free
+
+#United States
+#the808.net
+# deb http://raspbian.the808.net/raspbian wheezy main contrib non-free
+
+#Leaseweb
+# deb http://mirror.us.leaseweb.net/raspbian/raspbian wheezy main contrib non-free
+
+#United States
+#nwlinux
+# deb http://raspbian.nwlinux.us/raspbian wheezy main contrib non-free
+
+#United States
+#Caronet
+# deb http://raspbian.caro.net/raspbian 
+#rsync rsync://raspbian.caro.net/raspbian/raspbian wheezy main contrib non-free
+
+#Michigan Tech
+#Linux Users Group
+# deb http://lug.mtu.edu/raspbian wheezy main contrib non-free
+
+#United States
+#Computer Action Team - Portland State University
+# deb http://mirrors.cat.pdx.edu/raspbian/raspbian wheezy main contrib non-free
+
+#United States
+#Glenn McGurrin
+# deb http://mirror.glennmcgurrin.com/raspbian/ wheezy main contrib non-free
+
+#Brazil
+#Federal University
+#of Mato Grosso do Sul
+#UFMS
+# deb http://raspbian.ufms.br/raspbian/ wheezy main contrib non-free
+
+#Australia
+#AARNet
+# deb http://mirror.aarnet.edu.au/pub/raspbian/raspbian wheezy main contrib non-free
+
+#Australia
+#Over The Wire
+# deb http://mirror.overthewire.com.au/pub/raspbian/raspbian wheezy main contrib non-free
+
+#Australia
+#SkyMesh Pty Ltd
+# deb http://raspbian.skymesh.net.au/raspbian/raspbian wheezy main contrib non-free
+
+
+#Singapore
+#NUS
+#School of Computing
+#SigLabs
+# deb http://mirror.nus.edu.sg/raspbian/raspbian wheezy main contrib non-free
+
+#China
+#Tsinghua University Network Administrators
+# deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ wheezy main contrib non-free
+
+#China
+#Dalian Neusoft University of Information
+# deb http://mirrors.neusoft.edu.cn/raspbian/raspbian wheezy main contrib non-free
+
+#China
+#Cohesion Network Security Studio (CNSS)
+# deb http://raspbian.cnssuestc.org/raspbian/ wheezy main contrib non-free
+
+#China
+#University of Science and Technology of China
+# deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ wheezy main contrib non-free
+
+#South Korea
+#dnetwork
+# deb http://mirror.devunt.kr/raspbian/raspbian/ wheezy main contrib non-free
+
+#South Korea
+#NeowizGames corp
+# deb http://ftp.neowiz.com/raspbian/raspbian wheezy main contrib non-free
+
+#South Korea
+#KAIST
+# deb http://ftp.kaist.ac.kr/raspbian/raspbian/ wheezy main contrib non-free
+
+#South Korea
+#Yongbok.net
+# deb http://mirror.yongbok.net/raspbian/raspbian/ wheezy main contrib non-free
+
+#South Korea
+#Love-Angel Electronic-Computation Laboratory
+# deb http://ftp.lecl.net/raspbian/raspbian/ wheezy main contrib non-free
+
+#Japan
+#JAIST
+# deb http://ftp.jaist.ac.jp/raspbian wheezy main contrib non-free
+# deb http://ftp.jaist.ac.jp/pub/Linux/raspbian-archive/raspbian wheezy main contrib non-free
+
+#Indonesia
+#DATAUTAMA-NET-ID
+# deb http://kartolo.sby.datautama.net.id/raspbian/raspbian wheezy main contrib non-free
+
+#Israel
+#Israel Internet Association (ISOC-IL)
+# deb http://mirror.isoc.org.il/pub/raspbian/ wheezy main contrib non-free
+
+#India
+#Honesty Net Solutions (I) Pvt Ltd
+# deb http://raspbian.mirror.net.in/raspbian/raspbian/ wheezy main contrib non-free
+
+#Taiwan
+#Yuan-Ze University
+# deb http://ftp.cse.yzu.edu.tw/raspbian/raspbian wheezy main contrib non-free
+
+#South Africa
+#TENET
+#Tertiary Education and
+#Research Network of
+#South Africa
+# deb http://raspbian.mirror.ac.za/raspbian/ wheezy main contrib non-free
