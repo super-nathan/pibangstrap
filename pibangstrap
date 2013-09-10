@@ -49,6 +49,7 @@ aptSetup
 debConfSetup
 thirdStage
 fourthStage
+libForVideo
 launch
 pibangApps
 lightdmSetup
@@ -646,6 +647,16 @@ rm -f pibangSetup
 chmod +x pibangSetup  &>> /var/log/pibangstrap.log
 LANG=C chroot $rootfs /pibangSetup  2>&1 | tee -a /var/log/pibangstrap.log
 fi
+}
+
+
+#this is the patch submitted by David Meyer to try and get the video libraries to play nice
+function libForVideo
+{
+cp /usr/lib/libs-pistrap/vclibs.sh $rootfs/vclibs.sh 2>&1 | tee -a /var/log/pibangstrap.log
+chmod +x vclibs.sh  &>> /var/log/pibangstrap.log 2>&1 | tee -a /var/log/pistrap.log
+LANG=C chroot $rootfs /vclibs.sh  2>&1 | tee -a /var/log/pibangstrap.log
+rm -f vclibs.sh
 }
 
 #lightdm this is our login manager, not needed for CLI-only setups
