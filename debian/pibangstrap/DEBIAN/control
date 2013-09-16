@@ -2,7 +2,7 @@ Package: pibangstrap
 Version: 0.3.6
 Architecture: amd64
 Maintainer: "Super" Nathan Weber <supernathansunshine@gmaill.com>
-Installed-Size: 48
+Installed-Size: 49
 Depends: binfmt-support, qemu, qemu-user-static, debootstrap, kpartx, lvm2, dosfstools, git-core, binutils, ca-certificates, ntp, ntpdate, openssh-server, less, vim, screen, multistrap, schroot, fakechroot, cdebootstrap, minicom, debhelper, devscripts, zip
 Section: devel
 Priority: extra
