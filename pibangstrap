@@ -190,7 +190,7 @@ deb_mirror=`cat $tempfile`
 
 
 
-
+# this is your last chance to abort. DOnt worry you are working in a chroot so you PROBALBY won't saft up your system
 function sayFinalWarning
 {
 whiptail --yesno "This utility is free software and may go horribly wrong.\n\n\nYou are bootstrapping ${hostname} with a desktop of ${pb_desktop}, using ${suite} (${arch}), from ${deb_mirror} into ${buildenv}\n\nAre you SURE you want to Continue?" 0 0
@@ -441,9 +441,10 @@ LANG=C chroot $rootfs /deb  2>&1 | tee -a /var/log/pibangstrap.log
 function thirdStage
 {
 
+
 echo "
                        *****************
-                           Stage 3
+                           Stage 3.14
                       *****************
 
 " >> /var/log/pibangstrap.log
@@ -639,6 +640,7 @@ PiBang Magic stage
 
 " >> /var/log/pibangstrap.log 
 echo "
+#!/bin/bash
 apt-get install -y  rsync curl wget molly-guard
 apt-get install -y  pbmenu-apps cb-welcome ceni mwt aptitude telnet sl pibang-configs htop powertop nmon iftop iotop sudo atop
 apt-get install -y  pibang-server
@@ -684,7 +686,8 @@ fi
 # This doesnt really work with ZSH and my current config. It's just a nice idea to have this around for BASH
 function motdSetup
 {
-echo "#!/bin/bash
+echo "
+#!/bin/bash
 sh -l -e <<\EOF1
 cat <<EOF2 >> /etc/motd.tail
 
@@ -839,7 +842,8 @@ function cleanUp
 
 sleep 10s &&
 # Tidy up afterward
-echo "#!/bin/bash
+echo "
+#!/bin/bash
 passwd -d root
 apt-get -qq clean
 rm -f cleanup
